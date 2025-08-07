@@ -23,8 +23,21 @@ class ConsentExecutor: NSObject {
                 if error != nil {
                     call.reject("Request consent info failed")
                 } else {
+
+                    let status = self.getConsentStatusString(ConsentInformation.shared.consentStatus);
+
+
+                    if (status == "OBTAINED")
+                    {
+                        let unityMetadata = UnityAds.UADSMetaData();
+                        unityMetadata.set("gdpr.consent", value: true);
+                        unityMetadata.set("privacy.consent", value: true)
+                        unityMetadata.commit();
+                    }
+
+
                     call.resolve([
-                        "status": self.getConsentStatusString(ConsentInformation.shared.consentStatus),
+                        "status": status,
                         "isConsentFormAvailable": ConsentInformation.shared.formStatus == FormStatus.available
                     ])
                 }
