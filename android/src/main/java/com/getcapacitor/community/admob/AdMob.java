@@ -20,6 +20,8 @@ import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import org.json.JSONException;
+import com.google.android.gms.ads.AdInspectorError;
+import com.google.android.gms.ads.OnAdInspectorClosedListener;
 
 @CapacitorPlugin(
     permissions = { @Permission(alias = "network", strings = { Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET }) }
@@ -79,6 +81,19 @@ public class AdMob extends Plugin {
         } catch (Exception ex) {
             call.reject(ex.getLocalizedMessage(), ex);
         }
+    }
+
+    @PluginMethod
+    public void openAdInspector(final PluginCall call){
+        MobileAds.openAdInspector(
+            getContext(),
+            new OnAdInspectorClosedListener() {
+                public void onAdInspectorClosed(AdInspectorError error) {
+                    // Error will be non-null if ad inspector closed due to an error.
+                }
+            });
+
+        call.resolve();
     }
 
     @PluginMethod
