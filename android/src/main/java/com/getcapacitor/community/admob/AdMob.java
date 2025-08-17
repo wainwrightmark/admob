@@ -63,6 +63,13 @@ public class AdMob extends Plugin {
         getLogTag()
     );
 
+    private final InspectorExecutor inspectorExecutor = new InspectorExecutor(
+        this::getContext,
+        this::getActivity,
+        this::notifyListeners,
+        getLogTag()
+    );
+
     // Initialize AdMob with appId
     @PluginMethod
     public void initialize(final PluginCall call) {
@@ -85,15 +92,9 @@ public class AdMob extends Plugin {
 
     @PluginMethod
     public void openAdInspector(final PluginCall call){
-        MobileAds.openAdInspector(
-            getContext(),
-            new OnAdInspectorClosedListener() {
-                public void onAdInspectorClosed(AdInspectorError error) {
-                    // Error will be non-null if ad inspector closed due to an error.
-                }
-            });
+        inspectorExecutor.showInspector(call);
 
-        call.resolve();
+
     }
 
     @PluginMethod
