@@ -27,7 +27,8 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "prepareRewardVideoAd", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "showRewardVideoAd", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "prepareRewardInterstitialAd", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "showRewardInterstitialAd", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "showRewardInterstitialAd", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "openAdInspector", returnType: CAPPluginReturnPromise)
     ]
 
     var testingDevices: [String] = []
@@ -37,6 +38,7 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
     private let adRewardExecutor = AdRewardExecutor()
     private let adRewardInterstitialExecutor = AdRewardInterstitialExecutor()
     private let consentExecutor = ConsentExecutor()
+    private let InspectorExecutor = InspectorExecutor()
 
     /**
      * Enable SKAdNetwork to track conversions
@@ -49,6 +51,7 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
         self.adRewardInterstitialExecutor.plugin = self
         self.adInterstitialExecutor.plugin = self
         self.consentExecutor.plugin = self
+        self.
         self.setRequestConfiguration(call)
 
         MobileAds.shared.start(completionHandler: nil)
@@ -70,6 +73,10 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
         } else {
             call.resolve([:])
         }
+    }
+
+    @obj func openAdInspector(call: CAPPluginCall){
+        InspectorExecutor.showInspector(call)
     }
 
     @objc func setApplicationMuted(_ call: CAPPluginCall) {
