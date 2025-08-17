@@ -1,4 +1,4 @@
-package com.getcapacitor.community.admob.consent;
+package com.getcapacitor.community.admob.inspector;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,6 +19,9 @@ import com.google.android.ump.ConsentInformation;
 import com.google.android.ump.ConsentRequestParameters;
 import com.google.android.ump.FormError;
 import com.google.android.ump.UserMessagingPlatform;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.AdInspectorError;
+import com.google.android.gms.ads.OnAdInspectorClosedListener;
 
 public class InspectorExecutor extends Executor {
 
@@ -34,17 +37,26 @@ public class InspectorExecutor extends Executor {
     }
 
     @PluginMethod
-    public void showInspector(final PluginCall call, ) {
+    public void showInspector(final PluginCall call) {
         try {
-            MobileAds.openAdInspector(
-            getContext(),
-            new OnAdInspectorClosedListener() {
-                public void onAdInspectorClosed(AdInspectorError error) {
-                    // Error will be non-null if ad inspector closed due to an error.
-                }
-            });
 
-        call.resolve();
+            activitySupplier.get().runOnUiThread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            MobileAds.openAdInspector(
+                                    contextSupplier.get(),
+                                    new OnAdInspectorClosedListener() {
+                                        public void onAdInspectorClosed(AdInspectorError error) {
+                                            // Error will be non-null if ad inspector closed due to an error.
+                                        }
+                                    });
+
+                            call.resolve();
+                        }
+                    }
+            );
+
 
         } catch (Exception ex) {
             call.reject(ex.getLocalizedMessage(), ex);
