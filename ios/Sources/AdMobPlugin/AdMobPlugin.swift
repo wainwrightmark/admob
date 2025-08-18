@@ -38,7 +38,7 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
     private let adRewardExecutor = AdRewardExecutor()
     private let adRewardInterstitialExecutor = AdRewardInterstitialExecutor()
     private let consentExecutor = ConsentExecutor()
-    private let InspectorExecutor = InspectorExecutor()
+    private let inspectorExecutor = InspectorExecutor()
 
     /**
      * Enable SKAdNetwork to track conversions
@@ -51,7 +51,6 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
         self.adRewardInterstitialExecutor.plugin = self
         self.adInterstitialExecutor.plugin = self
         self.consentExecutor.plugin = self
-        self.
         self.setRequestConfiguration(call)
 
         MobileAds.shared.start(completionHandler: nil)
