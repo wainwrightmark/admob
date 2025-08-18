@@ -74,8 +74,11 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
-    @obj func openAdInspector(call: CAPPluginCall){
-        InspectorExecutor.showInspector(call)
+    @objc func openAdInspector(_ call: CAPPluginCall){
+        DispatchQueue.main.async{
+            self.inspectorExecutor.showInspector(call: call, viewController: self.getRootVC().unsafelyUnwrapped)
+        }
+
     }
 
     @objc func setApplicationMuted(_ call: CAPPluginCall) {
