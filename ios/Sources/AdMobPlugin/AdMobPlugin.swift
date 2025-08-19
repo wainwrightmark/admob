@@ -1,6 +1,8 @@
 import Foundation
 import Capacitor
 import GoogleMobileAds
+import Google_Mobile_Ads_SDK
+import FBAudienceNetwork
 #if canImport(AppTrackingTransparency)
 import AppTrackingTransparency
 #endif
@@ -52,6 +54,8 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
         self.adInterstitialExecutor.plugin = self
         self.consentExecutor.plugin = self
         self.setRequestConfiguration(call)
+        
+        FBAdSettings.setAdvertiserTrackingEnabled(true)
 
         MobileAds.shared.start(completionHandler: nil)
         call.resolve([:])
@@ -74,8 +78,11 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
-    @obj func openAdInspector(call: CAPPluginCall){
-        InspectorExecutor.showInspector(call)
+    @objc func openAdInspector(_ call: CAPPluginCall){
+        DispatchQueue.main.async {
+            self.inspectorExecutor.showInspector(call: call,viewController: self.getRootVC().unsafelyUnwrapped)
+        }
+        
     }
 
     @objc func setApplicationMuted(_ call: CAPPluginCall) {
@@ -107,7 +114,7 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
      *  https://developers.google.com/ad-manager/mobile-ads-sdk/ios/banner?hl=ja
      */
     @objc func showBanner(_ call: CAPPluginCall) {
-        let adUnitID = getAdId(call, "ca-app-pub-3940256099942544/6300978111")
+        let adUnitID = getAdId(call)
         let request = self.GADRequestWithOption(call.getBool("npa") ?? false)
 
         DispatchQueue.main.async {
@@ -138,7 +145,7 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
      *  https://developers.google.com/admob/ios/interstitial?hl=ja
      */
     @objc func prepareInterstitial(_ call: CAPPluginCall) {
-        let adUnitID = getAdId(call, "ca-app-pub-3940256099942544/1033173712")
+        let adUnitID = getAdId(call)
         let request = self.GADRequestWithOption(call.getBool("npa") ?? false)
 
         DispatchQueue.main.async {
@@ -157,7 +164,7 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
      *  https://developers.google.com/ad-manager/mobile-ads-sdk/ios/rewarded-ads
      */
     @objc func prepareRewardVideoAd(_ call: CAPPluginCall) {
-        let adUnitID = getAdId(call, "ca-app-pub-3940256099942544/1712485313")
+        let adUnitID = getAdId(call)
         let request = self.GADRequestWithOption(call.getBool("npa") ?? false)
 
         DispatchQueue.main.async {
@@ -176,7 +183,7 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
      *  https://developers.google.com/ad-manager/mobile-ads-sdk/ios/rewarded-interstitial
      */
     @objc func prepareRewardInterstitialAd(_ call: CAPPluginCall) {
-        let adUnitID = getAdId(call, "ca-app-pub-3940256099942544/6978759866")
+        let adUnitID = getAdId(call)
         let request = self.GADRequestWithOption(call.getBool("npa") ?? false)
 
         DispatchQueue.main.async {
@@ -251,12 +258,8 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
-    private func getAdId(_ call: CAPPluginCall, _ testingID: String) -> String {
-        let adUnitID = call.getString("adId") ?? testingID
-        let isTest = call.getBool("isTesting") ?? false
-        if isTest {
-            return testingID
-        }
+    private func getAdId(_ call: CAPPluginCall) -> String {
+        let adUnitID = call.getString("adId") ?? ""
         return adUnitID
     }
 
