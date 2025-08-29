@@ -2,6 +2,7 @@ import Foundation
 import Capacitor
 import GoogleMobileAds
 import UserMessagingPlatform
+import FBAudienceNetwork
 
 class ConsentExecutor: NSObject {
     weak var plugin: AdMobPlugin?
@@ -29,10 +30,20 @@ class ConsentExecutor: NSObject {
 
                     if (status == "OBTAINED")
                     {
-                        let unityMetadata = UnityAds.UADSMetaData();
-                        unityMetadata.set("gdpr.consent", value: true);
+                        let unityMetadata = UnityAds.UADSMetaData()
+                        unityMetadata.set("gdpr.consent", value: true)
                         unityMetadata.set("privacy.consent", value: true)
                         unityMetadata.commit();
+
+
+                        FBAdSettings.setAdvertiserTrackingEnabled(true)
+                    }else{
+                        let unityMetadata = UnityAds.UADSMetaData()
+                        unityMetadata.set("gdpr.consent", value: false)
+                        unityMetadata.set("privacy.consent", value: false)
+                        unityMetadata.commit();
+
+                        FBAdSettings.setAdvertiserTrackingEnabled(false)
                     }
 
 

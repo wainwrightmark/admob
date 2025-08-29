@@ -1,12 +1,16 @@
-import Foundation
 import Capacitor
-import GoogleMobileAds
-import Google_Mobile_Ads_SDK
-import FBAudienceNetwork
-#if canImport(AppTrackingTransparency)
-import AppTrackingTransparency
-#endif
 
+import FBAudienceNetwork
+
+import Foundation
+
+import GoogleMobileAds
+
+import Google_Mobile_Ads_SDK
+
+#if canImport(AppTrackingTransparency)
+    import AppTrackingTransparency
+#endif
 @objc(AdMobPlugin)
 public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "AdMob"
@@ -30,7 +34,7 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "showRewardVideoAd", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "prepareRewardInterstitialAd", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "showRewardInterstitialAd", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "openAdInspector", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "openAdInspector", returnType: CAPPluginReturnPromise),
     ]
 
     var testingDevices: [String] = []
@@ -54,8 +58,6 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
         self.adInterstitialExecutor.plugin = self
         self.consentExecutor.plugin = self
         self.setRequestConfiguration(call)
-        
-        FBAdSettings.setAdvertiserTrackingEnabled(true)
 
         MobileAds.shared.start(completionHandler: nil)
         call.resolve([:])
@@ -67,22 +69,23 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func requestTrackingAuthorization(_ call: CAPPluginCall) {
         if #available(iOS 14, *) {
             #if canImport(AppTrackingTransparency)
-            ATTrackingManager.requestTrackingAuthorization(completionHandler: { _ in
-                call.resolve([:])
-            })
+                ATTrackingManager.requestTrackingAuthorization(completionHandler: { _ in
+                    call.resolve([:])
+                })
             #else
-            call.resolve([:])
+                call.resolve([:])
             #endif
         } else {
             call.resolve([:])
         }
     }
 
-    @objc func openAdInspector(_ call: CAPPluginCall){
+    @objc func openAdInspector(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
-            self.inspectorExecutor.showInspector(call: call,viewController: self.getRootVC().unsafelyUnwrapped)
+            self.inspectorExecutor.showInspector(
+                call: call, viewController: self.getRootVC().unsafelyUnwrapped)
         }
-        
+
     }
 
     @objc func setApplicationMuted(_ call: CAPPluginCall) {
@@ -98,7 +101,7 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func setApplicationVolume(_ call: CAPPluginCall) {
         if var volume = call.getFloat("volume") {
             // Clamp volumes.
-            if volume < 0.0 {volume = 0.0} else if volume > 1.0 {volume = 1.0}
+            if volume < 0.0 { volume = 0.0 } else if volume > 1.0 { volume = 1.0 }
 
             MobileAds.shared.applicationVolume = volume
 
@@ -242,7 +245,8 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
         let tagForUnderAgeOfConsent = call.getBool("tagForUnderAgeOfConsent", false)
 
         DispatchQueue.main.async {
-            self.consentExecutor.requestConsentInfo(call, debugGeography, testDeviceIdentifiers, tagForUnderAgeOfConsent)
+            self.consentExecutor.requestConsentInfo(
+                call, debugGeography, testDeviceIdentifiers, tagForUnderAgeOfConsent)
         }
     }
 
@@ -281,7 +285,8 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
     private func setRequestConfiguration(_ call: CAPPluginCall) {
 
         if call.getBool("initializeForTesting") ?? false {
-            MobileAds.shared.requestConfiguration.testDeviceIdentifiers = call.getArray("testingDevices", String.self) ?? []
+            MobileAds.shared.requestConfiguration.testDeviceIdentifiers =
+                call.getArray("testingDevices", String.self) ?? []
         }
 
         if call.getBool("tagForChildDirectedTreatment") == true {
@@ -318,7 +323,7 @@ public class AdMobPlugin: CAPPlugin, CAPBridgedPlugin {
 
         if window == nil {
             let scene: UIWindowScene? = UIApplication.shared.connectedScenes.first as? UIWindowScene
-            window = scene?.windows.filter({$0.isKeyWindow}).first
+            window = scene?.windows.filter({ $0.isKeyWindow }).first
             if window == nil {
                 window = scene?.windows.first
             }
