@@ -72,7 +72,7 @@ Don't forget to replace `[APP_ID]` by your AdMob application Id.
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `playServicesAdsVersion` version of `com.google.android.gms:play-services-ads` (default: `23.0.0`)
+- `playServicesAdsVersion` version of `com.google.android.gms:play-services-ads` (default: `24.6`)
 - `androidxCoreKTXVersion`: version of `androidx.core:core-ktx` (default: `1.13.0`)
 
 ### iOS configuration
@@ -1212,7 +1212,9 @@ https://developers.google.com/admob/android/rewarded-video-adapters?hl=en
 
 From T, pick a set of properties whose keys are in the union K
 
-<code>{ [P in K]: T[P]; }</code>
+<code>{
+ [P in K]: T[P];
+ }</code>
 
 
 ### Enums
