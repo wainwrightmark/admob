@@ -18,5 +18,4 @@ Pod::Spec.new do |s|
   s.dependency 'Google-Mobile-Ads-SDK', '12.7.0'
   s.dependency 'GoogleUserMessagingPlatform', '3.0.0'
   s.dependency 'GoogleMobileAdsMediationUnity'
-  s.dependency 'GoogleMobileAdsMediationFacebook'
 end
