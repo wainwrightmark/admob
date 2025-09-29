@@ -140,19 +140,19 @@ public class AdConsentExecutor extends Executor {
             consentInformation = UserMessagingPlatform.getConsentInformation(contextSupplier.get());
         }
 
-        if (consentInformation != null){
-            if (consentInformation.getConsentStatus() == ConsentInformation.ConsentStatus.OBTAINED){
-                com.unity3d.ads.metadata.MetaData unity_metadata = new com.unity3d.ads.metadata.MetaData(this.contextSupplier.get());
-                unity_metadata.set("gdpr.consent", true);
-                unity_metadata.set("privacy.consent", true);
-                unity_metadata.commit();
-            }else{
-                com.unity3d.ads.metadata.MetaData unity_metadata = new com.unity3d.ads.metadata.MetaData(this.contextSupplier.get());
-                unity_metadata.set("gdpr.consent", false);
-                unity_metadata.set("privacy.consent", false);
-                unity_metadata.commit();
-            }
-        }
+        // if (consentInformation != null){
+        //     if (consentInformation.getConsentStatus() == ConsentInformation.ConsentStatus.OBTAINED){
+        //         com.unity3d.ads.metadata.MetaData unity_metadata = new com.unity3d.ads.metadata.MetaData(this.contextSupplier.get());
+        //         unity_metadata.set("gdpr.consent", true);
+        //         unity_metadata.set("privacy.consent", true);
+        //         unity_metadata.commit();
+        //     }else{
+        //         com.unity3d.ads.metadata.MetaData unity_metadata = new com.unity3d.ads.metadata.MetaData(this.contextSupplier.get());
+        //         unity_metadata.set("gdpr.consent", false);
+        //         unity_metadata.set("privacy.consent", false);
+        //         unity_metadata.commit();
+        //     }
+        // }
 
     }
 }
