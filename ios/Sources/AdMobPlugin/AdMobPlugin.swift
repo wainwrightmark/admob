@@ -1,7 +1,5 @@
 import Capacitor
 
-import FBAudienceNetwork
-
 import Foundation
 
 import GoogleMobileAds
