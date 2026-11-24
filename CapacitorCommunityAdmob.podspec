@@ -19,4 +19,5 @@ Pod::Spec.new do |s|
   s.dependency 'WebViewNativeUIEngine', '>= 1.0.10', '< 2.0'
   s.dependency 'Google-Mobile-Ads-SDK', '13.11.0'
   s.dependency 'GoogleUserMessagingPlatform', '~> 3.1'
+  s.dependency 'GoogleMobileAdsMediationUnity'
 end

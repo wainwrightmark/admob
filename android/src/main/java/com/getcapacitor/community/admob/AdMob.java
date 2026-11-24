@@ -9,6 +9,7 @@ import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.community.admob.inspector.InspectorExecutor;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.community.admob.appopen.AppOpenAdPlugin;
@@ -60,6 +61,13 @@ public class AdMob extends Plugin {
         this::notifyListeners,
         getLogTag(),
         InterstitialAdCallbackAndListeners.INSTANCE
+    );
+
+    private final InspectorExecutor inspectorExecutor = new InspectorExecutor(
+        this::getContext,
+        this::getActivity,
+        this::notifyListeners,
+        getLogTag()
     );
 
     private final AdConsentExecutor adConsentExecutor = new AdConsentExecutor(
@@ -173,6 +181,13 @@ public class AdMob extends Plugin {
         } else {
             new Handler(Looper.getMainLooper()).post(action);
         }
+    }
+
+    @PluginMethod
+    public void openAdInspector(final PluginCall call){
+        inspectorExecutor.showInspector(call);
+
+
     }
 
     @PluginMethod
