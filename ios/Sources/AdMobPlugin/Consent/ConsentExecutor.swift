@@ -2,6 +2,7 @@ import Foundation
 import Capacitor
 import GoogleMobileAds
 import UserMessagingPlatform
+import UnityAds
 
 class ConsentExecutor: NSObject {
     weak var plugin: AdMobPlugin?
@@ -24,7 +25,7 @@ class ConsentExecutor: NSObject {
                     call.reject("Request consent info failed")
                 } else {
 
-                    if (status == "OBTAINED")
+                    if (self.getConsentStatusString(ConsentInformation.shared.consentStatus) == "OBTAINED")
                     {
                         let unityMetadata = UADSMetaData()
                         unityMetadata.set("gdpr.consent", value: true)

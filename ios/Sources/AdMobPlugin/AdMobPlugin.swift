@@ -1,7 +1,7 @@
 import Foundation
 import Capacitor
 import GoogleMobileAds
-import Google_Mobile_Ads_SDK
+import UnityAds
 #if canImport(AppTrackingTransparency)
 import AppTrackingTransparency
 #endif
